@@ -3,4 +3,5 @@
     <string name="pokemon_response_null">Pokemon response is null</string>
     <string name="failed_response">Failed to get response</string>
     <string name="unexpected_error">Unexpected error</string>
+    <string name="dialog_ok">OK</string>
 </resources>
