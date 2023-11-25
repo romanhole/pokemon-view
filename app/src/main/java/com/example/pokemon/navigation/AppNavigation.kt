@@ -8,13 +8,17 @@ import androidx.navigation.compose.composable
 import com.example.pokemon.navigation.Arguments.POKEMON_ID
 import com.example.pokemon.ui.screen.HomeScreen
 import com.example.pokemon.ui.screen.PokemonScreen
+import com.example.pokemon.ui.theme.Dimen
 
 @Composable
 fun AppNavigation(navHostController: NavHostController) {
+    val dimens = Dimen()
+
     NavHost(navController = navHostController, startDestination = Routes.HomeScreen.route) {
 
         composable(route = Routes.HomeScreen.route) {
             HomeScreen(
+                dimens = dimens,
                 navController = navHostController
             )
         }
