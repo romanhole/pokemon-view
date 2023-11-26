@@ -14,8 +14,10 @@ import com.example.pokemon.ui.data.enums.EnumErrorResponse.FAILED_GET_OFFSET_URL
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 const val firstPokemonsUrl = "https://pokeapi.co/api/v2/pokemon/?limit=10&offset=0"
@@ -28,12 +30,28 @@ class HomeViewModel @Inject constructor(
     private var nextUrl: String? = null
     private var previousUrl: String? = null
 
+    val pageState = MutableStateFlow<PageState?>(null)
+
     private val _state = MutableStateFlow<UiState<List<PokemonItem>>>(UiState.Idle)
     val state = _state.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000L),
         UiState.Idle
     )
+
+    init {
+        viewModelScope.launch {
+            pageState.asStateFlow().collect { newState ->
+                when(newState) {
+                    is PageState.NextPage -> getPokemons(nextUrl)
+
+                    is PageState.PreviousPage -> getPokemons(previousUrl)
+
+                    null -> Unit
+                }
+            }
+        }
+    }
 
     suspend fun getPokemons(url: String?) {
         val urlVerified = url ?: firstPokemonsUrl
@@ -94,14 +112,6 @@ class HomeViewModel @Inject constructor(
         return ResponseData.Success(pokemonItemList)
     }
 
-    suspend fun nextPokemons() {
-        getPokemons(nextUrl)
-    }
-
-    suspend fun previousPokemons() {
-        getPokemons(previousUrl)
-    }
-
     suspend fun getPokemonById(id: Int): ResponseData<Pokemon> {
         return when(val ret = pokemonRepository.getPokemon(id)) {
             is ResponseData.Success -> ResponseData.Success(ret.ret)
@@ -123,4 +133,10 @@ class HomeViewModel @Inject constructor(
 
     private fun getPokemonId(url: String): String =
         url.removeSuffix("/").substringAfterLast("/")
+
+    sealed class PageState {
+        object NextPage: PageState()
+
+        object PreviousPage: PageState()
+    }
 }

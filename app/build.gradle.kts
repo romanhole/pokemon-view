@@ -65,6 +65,7 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.1.2")
     implementation("androidx.compose.material3:material3-window-size-class:1.1.2")
     implementation("androidx.navigation:navigation-compose:2.7.5")
+    implementation("io.coil-kt:coil-compose:2.5.0")
 
     //dagger hilt
     implementation ("com.google.dagger:hilt-android:2.48.1")
