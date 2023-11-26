@@ -27,7 +27,10 @@ fun AppNavigation(navHostController: NavHostController) {
             route = Routes.PokemonScreen.route,
             arguments = Routes.PokemonScreen.arguments) {
             val pokemonID = remember { it.arguments?.getInt(POKEMON_ID) ?: 0 }
-            PokemonScreen(id = pokemonID)
+            PokemonScreen(
+                dimens = dimens,
+                id = pokemonID
+            )
         }
     }
 }

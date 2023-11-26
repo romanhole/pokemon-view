@@ -27,6 +27,7 @@ class HomeViewModel @Inject constructor(
     private val pokemonRepository: PokemonRepository
 ): ViewModel() {
 
+    private var currentUrl: String = firstPokemonsUrl
     private var nextUrl: String? = null
     private var previousUrl: String? = null
 
@@ -54,13 +55,14 @@ class HomeViewModel @Inject constructor(
     }
 
     suspend fun getPokemons(url: String?) {
-        val urlVerified = url ?: firstPokemonsUrl
+        val urlVerified = url ?: currentUrl
 
         when(val ret = getLimitAndOffset(urlVerified)) {
             is ResponseData.Success -> {
                 val pokemonList = pokemonRepository.getPokemonList(ret.ret.first, ret.ret.second)
                 when(pokemonList) {
                     is ResponseData.Success -> {
+                        currentUrl = urlVerified
                         nextUrl = pokemonList.ret.next
                         previousUrl = pokemonList.ret.previous
 
@@ -112,7 +114,7 @@ class HomeViewModel @Inject constructor(
         return ResponseData.Success(pokemonItemList)
     }
 
-    suspend fun getPokemonById(id: Int): ResponseData<Pokemon> {
+    private suspend fun getPokemonById(id: Int): ResponseData<Pokemon> {
         return when(val ret = pokemonRepository.getPokemon(id)) {
             is ResponseData.Success -> ResponseData.Success(ret.ret)
             is ResponseData.Error -> ResponseData.Error(ret.error)

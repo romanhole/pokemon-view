@@ -51,7 +51,6 @@ fun PokemonCard(pokemonItem: PokemonItem, goToPokemonDetails: () -> Unit) {
                     .fillMaxWidth()
                     .aspectRatio(1.5f),
                 contentScale = ContentScale.Crop
-                //placeholder = painterResource(id = R.drawable.placeholder)
             )
             Spacer(modifier = Modifier.height(dimens.default))
             Text(
@@ -75,46 +74,6 @@ fun PokemonCard(pokemonItem: PokemonItem, goToPokemonDetails: () -> Unit) {
             )
         }
     }
-
-
-    /*Card(
-        onClick =  goToPokemonDetails,
-        modifier = Modifier
-            .padding(dimens.default)
-            .wrapContentSize(),
-        shape = RoundedCornerShape(dimens.default),
-        elevation = CardDefaults.cardElevation(dimens.spaceXXSmall)
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(dimens.default)
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                painter = rememberAsyncImagePainter(pokemonItem.imageUrl),
-                contentDescription = "${pokemonItem.name} image",
-                modifier = Modifier
-                    .padding(dimens.spaceLarge)
-                    .size(dimens.spaceLarge),
-                alignment = Alignment.Center
-            )
-
-            Spacer(
-                modifier = Modifier
-                    .height(dimens.default)
-            )
-            
-            Text(text = "#${pokemonItem.numberPokedex}")
-            
-            Spacer(
-                modifier = Modifier
-                    .height(dimens.default)
-            )
-            
-            Text(text = pokemonItem.name)
-        }
-    }*/
 }
 
 @Preview
