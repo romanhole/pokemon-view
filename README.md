@@ -49,8 +49,6 @@ A camada de ui se estrutura da seguinte forma:
 
 - Adicionar suporte para português
 
-- Adicionar todas as strings no arquivo de strings.xml
-
 - Adicionar splash screen
 
 - Adicionar loading state
