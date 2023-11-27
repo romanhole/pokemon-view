@@ -16,12 +16,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.pokemon.network.models.Pokemon
 import com.example.pokemon.ui.components.ErrorDialog
@@ -34,9 +38,13 @@ import java.util.Locale
 fun PokemonScreen(
     dimens: Dimen,
     id: Int,
+    navController: NavController,
     viewModel: PokemonViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    var isErrorDialogOpen: Pair<Boolean, Int> by remember {
+        mutableStateOf(Pair(false, 0))
+    }
 
     LaunchedEffect(key1 = Unit) {
         viewModel.getPokemonById(id)
@@ -50,7 +58,17 @@ fun PokemonScreen(
             pokemon = (state as UiState.Success<Pokemon>).ret
         )
 
-        is UiState.Error -> ErrorDialog(text = stringResource((state as UiState.Error).error))
+        is UiState.Error -> isErrorDialogOpen = Pair(true, (state as UiState.Error).error)
+    }
+
+    if (isErrorDialogOpen.first) {
+        ErrorDialog(
+            text = stringResource(isErrorDialogOpen.second),
+            onDismissRequest = {
+                isErrorDialogOpen = Pair(false, 0)
+                navController.popBackStack()
+            }
+        )
     }
 }
 

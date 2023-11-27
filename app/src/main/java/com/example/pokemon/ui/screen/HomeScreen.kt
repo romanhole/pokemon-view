@@ -1,13 +1,25 @@
 package com.example.pokemon.ui.screen
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -16,11 +28,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.pokemon.R
 import com.example.pokemon.navigation.Routes.PokemonScreen.toPokemonScreen
 import com.example.pokemon.network.models.PokemonItem
 import com.example.pokemon.ui.components.ErrorDialog
@@ -57,8 +74,15 @@ fun HomeScreen(
                 navigateToPokemonScreen = { id ->
                     navController.toPokemonScreen(id)
                 },
-                nextPokemons = { viewModel.pageState.update { HomeViewModel.PageState.NextPage } },
-                previousPokemons = { viewModel.pageState.update { HomeViewModel.PageState.PreviousPage } }
+                nextPokemons = {
+                    viewModel.pageState.update { HomeViewModel.PageState.NextPage }
+               },
+                previousPokemons = {
+                    viewModel.pageState.update { HomeViewModel.PageState.PreviousPage }
+               },
+                navigateToAboutScreen = {
+                    navController.toPokemonScreen(20)
+                }
             )
         }
 
@@ -81,14 +105,55 @@ private fun LaunchHomeScreen(
     dimens: Dimen,
     pokemonItems: List<PokemonItem>,
     navigateToPokemonScreen: (Int) -> Unit,
+    navigateToAboutScreen: () -> Unit,
     nextPokemons: () -> Unit,
     previousPokemons: () -> Unit
 ) {
+    var isSearchBarVisible by remember { mutableStateOf(false) }
+    var text by remember { mutableStateOf("") }
+
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = "Pokedex") }
-            )
+            if (isSearchBarVisible) {
+                SearchBar(
+                    text = text,
+                    onSearchClose = {
+                        text = ""
+                        isSearchBarVisible = false
+                    },
+                    onTextChanged = {
+                        text = it
+                    },
+                    searchPokemonById = {
+                        navigateToPokemonScreen(text.toInt())
+                    }
+                )
+            } else {
+                TopAppBar(
+                    title = {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_pokedex_logo),
+                            contentDescription = null)
+                    },
+                    actions = {
+                        IconButton(onClick = {
+                            isSearchBarVisible = true
+                        }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Search,
+                                contentDescription = null
+                            )
+                        }
+                        IconButton(onClick = navigateToAboutScreen) {
+                            Icon(
+                                imageVector = Icons.Outlined.Info,
+                                contentDescription = null
+                            )
+                        }
+                    }
+                )
+            }
         }
     ) {
         LazyVerticalGrid(
@@ -122,5 +187,47 @@ private fun LaunchHomeScreen(
                 }
             }
         }
+    }
+}
+@Composable
+fun SearchBar(
+    text: String,
+    onSearchClose: () -> Unit,
+    onTextChanged: (String) -> Unit,
+    searchPokemonById: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        TextField(
+            value = text,
+            onValueChange = { query ->
+                onTextChanged(query)
+            },
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 8.dp),
+            placeholder = { Text("Buscar pokemon pelo número") },
+            singleLine = true,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                disabledContainerColor = Color.White,
+            ),
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            leadingIcon = {
+                IconButton(onClick = { searchPokemonById() }) {
+                    Icon(Icons.Outlined.Search, contentDescription = "Search")
+                }
+            },
+            trailingIcon = {
+                IconButton(onClick = onSearchClose) {
+                    Icon(Icons.Default.Close, contentDescription = "Fechar busca")
+                }
+            }
+        )
     }
 }

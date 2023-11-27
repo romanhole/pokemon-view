@@ -29,7 +29,8 @@ fun AppNavigation(navHostController: NavHostController) {
             val pokemonID = remember { it.arguments?.getInt(POKEMON_ID) ?: 0 }
             PokemonScreen(
                 dimens = dimens,
-                id = pokemonID
+                id = pokemonID,
+                navController = navHostController
             )
         }
     }
