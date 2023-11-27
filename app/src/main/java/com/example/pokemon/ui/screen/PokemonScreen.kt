@@ -10,8 +10,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -55,7 +62,8 @@ fun PokemonScreen(
         
         is UiState.Success -> PokemonDetails(
             dimens = dimens,
-            pokemon = (state as UiState.Success<Pokemon>).ret
+            pokemon = (state as UiState.Success<Pokemon>).ret,
+            popBackStack = { navController.popBackStack() }
         )
 
         is UiState.Error -> isErrorDialogOpen = Pair(true, (state as UiState.Error).error)
@@ -72,81 +80,103 @@ fun PokemonScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PokemonDetails(
     dimens: Dimen,
-    pokemon: Pokemon
+    pokemon: Pokemon,
+    popBackStack: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .padding(dimens.default)
-    ) {
-        AsyncImage(
-            model = pokemon.sprites.front_default,
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1.5f),
-            contentScale = ContentScale.Crop
-        )
-
-        Spacer(modifier = Modifier.height(dimens.default))
-
-        Text(
-            text = "Nº ${pokemon.id}",
-            color = MaterialTheme.colorScheme.onSurface,
-            fontSize = dimens.fontLarge,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally)
-        )
-
-        Spacer(modifier = Modifier.height(dimens.default))
-
-        Text(
-            text = pokemon.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() },
-            color = MaterialTheme.colorScheme.onSurface,
-            fontSize = dimens.fontLarge,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally)
-        )
-        
-        Spacer(modifier = Modifier.height(dimens.spaceMedium))
-
-        Text(
-            text = "Stats:",
-            fontSize = dimens.fontLarge
-        )
-        
-        Spacer(modifier = Modifier.height(dimens.spaceSmall))
-        
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(dimens.spaceSmall)
-        ) {
-            items(pokemon.stats) { stat ->
-                Text(text = "${stat.stat.name}: ${stat.base_stat}")
-            }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    IconButton(onClick = popBackStack ) {
+                        Icon(
+                            imageVector = Icons.Outlined.ArrowBack,
+                            contentDescription = null
+                        )
+                    }
+                }
+            )
         }
-
-        Spacer(modifier = Modifier.height(dimens.spaceMedium))
-        
-        Text(
-            text = "Types:",
-            fontSize = dimens.fontLarge
-        )
-
-        Spacer(modifier = Modifier.height(dimens.spaceSmall))
-        
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(dimens.spaceSmall)
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(
+                    top = it.calculateTopPadding(),
+                    bottom = dimens.default,
+                    start = dimens.spaceXXMedium,
+                    end = dimens.spaceXXMedium
+                )
         ) {
-            items(pokemon.types) { type ->
-                Text(text = type.type.name)
+            AsyncImage(
+                model = pokemon.sprites.front_default,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1.5f),
+                contentScale = ContentScale.Crop
+            )
+
+            Spacer(modifier = Modifier.height(dimens.default))
+
+            Text(
+                text = "Nº ${pokemon.id}",
+                color = MaterialTheme.colorScheme.onSurface,
+                fontSize = dimens.fontLarge,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(modifier = Modifier.height(dimens.default))
+
+            Text(
+                text = pokemon.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() },
+                color = MaterialTheme.colorScheme.onSurface,
+                fontSize = dimens.fontLarge,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(modifier = Modifier.height(dimens.spaceMedium))
+
+            Text(
+                text = "Stats:",
+                fontSize = dimens.fontLarge
+            )
+
+            Spacer(modifier = Modifier.height(dimens.spaceSmall))
+
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(dimens.spaceSmall)
+            ) {
+                items(pokemon.stats) { stat ->
+                    Text(text = "${stat.stat.name}: ${stat.base_stat}")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(dimens.spaceMedium))
+
+            Text(
+                text = "Types:",
+                fontSize = dimens.fontLarge
+            )
+
+            Spacer(modifier = Modifier.height(dimens.spaceSmall))
+
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(dimens.spaceSmall)
+            ) {
+                items(pokemon.types) { type ->
+                    Text(text = type.type.name)
+                }
             }
         }
     }

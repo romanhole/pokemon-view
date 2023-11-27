@@ -25,6 +25,11 @@ sealed class Routes(
             id: Int
         ) = navigate("pokemon_screen/$id")
     }
+
+    object AboutScreen : Routes(route = "about_screen") {
+        fun NavController.toAboutScreen() =
+            navigate(route)
+    }
 }
 
 object Arguments {

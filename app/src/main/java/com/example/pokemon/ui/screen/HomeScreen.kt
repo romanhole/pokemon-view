@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.pokemon.R
+import com.example.pokemon.navigation.Routes.AboutScreen.toAboutScreen
 import com.example.pokemon.navigation.Routes.PokemonScreen.toPokemonScreen
 import com.example.pokemon.network.models.PokemonItem
 import com.example.pokemon.ui.components.ErrorDialog
@@ -81,7 +82,7 @@ fun HomeScreen(
                     viewModel.pageState.update { HomeViewModel.PageState.PreviousPage }
                },
                 navigateToAboutScreen = {
-                    navController.toPokemonScreen(20)
+                    navController.toAboutScreen()
                 }
             )
         }
