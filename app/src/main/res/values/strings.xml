@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Pokemon</string>
+    <string name="app_name">Pokedex</string>
     <string name="pokemon_response_null">Pokemon response is null</string>
     <string name="pokemon_list_response_null">Pokemon list response is null</string>
     <string name="failed_response">Failed to get response</string>
