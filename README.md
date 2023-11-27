@@ -43,6 +43,14 @@ A camada de ui se estrutura da seguinte forma:
 
 - Adicionar função de buscar por geração
 
-- Melhorar o tratamento de erros, mapeando mais erros e permitindo ao usuário caminhos para possíveis resoluções
+- Melhorar o tratamento de erros, mapeando mais erros, mensagens mais amigáveis e permitindo ao usuário caminhos para possíveis resoluções
 
 - Adicionar cache sob demanda utilizando o Room
+
+- Adicionar suporte para português
+
+- Adicionar todas as strings no arquivo de strings.xml
+
+- Adicionar splash screen
+
+- Adicionar loading state
