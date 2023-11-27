@@ -1,11 +1,11 @@
-package com.example.pokemon.navigation
+package com.example.pokemon.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.pokemon.navigation.Arguments.POKEMON_ID
+import com.example.pokemon.ui.navigation.Arguments.POKEMON_ID
 import com.example.pokemon.ui.screen.AboutScreen
 import com.example.pokemon.ui.screen.HomeScreen
 import com.example.pokemon.ui.screen.PokemonScreen

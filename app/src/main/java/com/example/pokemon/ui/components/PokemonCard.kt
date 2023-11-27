@@ -21,7 +21,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
-import com.example.pokemon.network.models.PokemonItem
+import com.example.pokemon.data.network.models.PokemonItem
 import com.example.pokemon.ui.theme.Dimen
 import com.example.pokemon.ui.theme.PokemonTheme
 

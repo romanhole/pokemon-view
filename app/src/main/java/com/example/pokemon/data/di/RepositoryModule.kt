@@ -1,7 +1,7 @@
-package com.example.pokemon.di
+package com.example.pokemon.data.di
 
-import com.example.pokemon.network.ApiService
-import com.example.pokemon.repository.PokemonRepository
+import com.example.pokemon.data.network.ApiService
+import com.example.pokemon.data.repository.PokemonRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,7 +1,7 @@
-package com.example.pokemon.network
+package com.example.pokemon.data.network
 
-import com.example.pokemon.network.models.Pokemon
-import com.example.pokemon.network.models.PokemonList
+import com.example.pokemon.data.network.models.Pokemon
+import com.example.pokemon.data.network.models.PokemonList
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

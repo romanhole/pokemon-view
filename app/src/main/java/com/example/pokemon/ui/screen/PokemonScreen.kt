@@ -34,7 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.pokemon.network.models.Pokemon
+import com.example.pokemon.data.network.models.Pokemon
 import com.example.pokemon.ui.components.ErrorDialog
 import com.example.pokemon.ui.data.UiState
 import com.example.pokemon.ui.theme.Dimen

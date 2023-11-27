@@ -3,10 +3,10 @@ package com.example.pokemon.ui.viewmodel
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pokemon.network.models.Pokemon
-import com.example.pokemon.network.models.PokemonItem
-import com.example.pokemon.network.models.PokemonResult
-import com.example.pokemon.repository.PokemonRepository
+import com.example.pokemon.data.network.models.Pokemon
+import com.example.pokemon.data.network.models.PokemonItem
+import com.example.pokemon.data.network.models.PokemonResult
+import com.example.pokemon.data.repository.PokemonRepository
 import com.example.pokemon.ui.data.ResponseData
 import com.example.pokemon.ui.data.UiState
 import com.example.pokemon.ui.data.enums.EnumErrorResponse.FAILED_GET_LIMIT_URL

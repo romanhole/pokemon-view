@@ -1,4 +1,4 @@
-package com.example.pokemon.network.models
+package com.example.pokemon.data.network.models
 
 data class PokemonType(
     val type: TypeInfo

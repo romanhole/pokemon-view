@@ -1,10 +1,10 @@
-package com.example.pokemon.navigation
+package com.example.pokemon.ui.navigation
 
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.example.pokemon.navigation.Arguments.POKEMON_ID
+import com.example.pokemon.ui.navigation.Arguments.POKEMON_ID
 
 sealed class Routes(
     val route: String,

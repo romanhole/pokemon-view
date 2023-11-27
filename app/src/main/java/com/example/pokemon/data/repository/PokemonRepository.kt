@@ -1,9 +1,9 @@
-package com.example.pokemon.repository
+package com.example.pokemon.data.repository
 
 import android.util.Log
-import com.example.pokemon.network.ApiService
-import com.example.pokemon.network.models.Pokemon
-import com.example.pokemon.network.models.PokemonList
+import com.example.pokemon.data.network.ApiService
+import com.example.pokemon.data.network.models.Pokemon
+import com.example.pokemon.data.network.models.PokemonList
 import com.example.pokemon.ui.data.ResponseData
 import com.example.pokemon.ui.data.enums.EnumErrorResponse
 import retrofit2.awaitResponse
