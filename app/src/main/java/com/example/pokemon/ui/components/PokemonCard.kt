@@ -55,7 +55,7 @@ fun PokemonCard(pokemonItem: PokemonItem, goToPokemonDetails: () -> Unit) {
             Spacer(modifier = Modifier.height(dimens.default))
             Text(
                 text = "Nº ${pokemonItem.numberPokedex}",
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.surfaceTint,
                 fontSize = dimens.fontDefault,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -65,7 +65,7 @@ fun PokemonCard(pokemonItem: PokemonItem, goToPokemonDetails: () -> Unit) {
             Spacer(modifier = Modifier.height(dimens.default))
             Text(
                 text = pokemonItem.name,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.surfaceTint,
                 fontSize = dimens.fontDefault,
                 textAlign = TextAlign.Center,
                 modifier = Modifier

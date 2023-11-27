@@ -158,7 +158,7 @@ private fun LaunchHomeScreen(
         }
     ) {
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(200.dp),
+            columns = GridCells.Fixed(2),
             modifier = Modifier
                 .padding(it)
         ) {
