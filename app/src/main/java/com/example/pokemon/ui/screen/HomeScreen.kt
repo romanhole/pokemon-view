@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -29,10 +30,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -190,6 +194,7 @@ private fun LaunchHomeScreen(
         }
     }
 }
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchBar(
     text: String,
@@ -197,6 +202,15 @@ fun SearchBar(
     onTextChanged: (String) -> Unit,
     searchPokemonById: () -> Unit
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    val onImeAction = KeyboardActions(
+        onDone = {
+            searchPokemonById()
+            keyboardController?.hide()
+        }
+    )
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -218,7 +232,10 @@ fun SearchBar(
                 unfocusedContainerColor = Color.White,
                 disabledContainerColor = Color.White,
             ),
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done
+            ),
             leadingIcon = {
                 IconButton(onClick = { searchPokemonById() }) {
                     Icon(Icons.Outlined.Search, contentDescription = null)
@@ -228,7 +245,8 @@ fun SearchBar(
                 IconButton(onClick = onSearchClose) {
                     Icon(Icons.Default.Close, contentDescription = null)
                 }
-            }
+            },
+            keyboardActions = onImeAction
         )
     }
 }
