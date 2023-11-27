@@ -211,7 +211,7 @@ fun SearchBar(
             modifier = Modifier
                 .weight(1f)
                 .padding(end = 8.dp),
-            placeholder = { Text("Buscar pokemon pelo número") },
+            placeholder = { Text("Search by pokemon number") },
             singleLine = true,
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.White,
@@ -221,12 +221,12 @@ fun SearchBar(
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             leadingIcon = {
                 IconButton(onClick = { searchPokemonById() }) {
-                    Icon(Icons.Outlined.Search, contentDescription = "Search")
+                    Icon(Icons.Outlined.Search, contentDescription = null)
                 }
             },
             trailingIcon = {
                 IconButton(onClick = onSearchClose) {
-                    Icon(Icons.Default.Close, contentDescription = "Fechar busca")
+                    Icon(Icons.Default.Close, contentDescription = null)
                 }
             }
         )
