@@ -58,15 +58,19 @@ class HomeViewModel @Inject constructor(
         val urlVerified = url ?: currentUrl
 
         when(val ret = getLimitAndOffset(urlVerified)) {
+
             is ResponseData.Success -> {
                 val pokemonList = pokemonRepository.getPokemonList(ret.ret.first, ret.ret.second)
+
                 when(pokemonList) {
+
                     is ResponseData.Success -> {
                         currentUrl = urlVerified
                         nextUrl = pokemonList.ret.next
                         previousUrl = pokemonList.ret.previous
 
                         when(val pokemonItemList = getPokemonList(pokemonList.ret.results)) {
+
                             is ResponseData.Success -> _state.update {
                                 UiState.Success(pokemonItemList.ret)
                             }
@@ -76,6 +80,7 @@ class HomeViewModel @Inject constructor(
                             }
                         }
                     }
+
                     is ResponseData.Error -> _state.update {
                         UiState.Error(pokemonList.error.resId)
                     }
@@ -90,11 +95,14 @@ class HomeViewModel @Inject constructor(
 
     private suspend fun getPokemonList(pokemonList: List<PokemonResult>): ResponseData<List<PokemonItem>> {
         val pokemonItemList: MutableList<PokemonItem> = mutableListOf()
+
         for (pokemonResult in pokemonList) {
             val pokemon = getPokemonById(
                 getPokemonId(pokemonResult.url).toInt()
             )
+
             when(pokemon) {
+
                 is ResponseData.Success -> {
                     pokemonItemList.add(
                         PokemonItem(
