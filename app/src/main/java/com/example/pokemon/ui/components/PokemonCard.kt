@@ -18,9 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
+import com.example.pokemon.R
 import com.example.pokemon.data.network.models.PokemonItem
 import com.example.pokemon.ui.theme.Dimen
 import com.example.pokemon.ui.theme.PokemonTheme
@@ -54,7 +56,7 @@ fun PokemonCard(pokemonItem: PokemonItem, goToPokemonDetails: () -> Unit) {
             )
             Spacer(modifier = Modifier.height(dimens.default))
             Text(
-                text = "Nº ${pokemonItem.numberPokedex}",
+                text = stringResource(R.string.pokemon_number, pokemonItem.numberPokedex),
                 color = MaterialTheme.colorScheme.surfaceTint,
                 fontSize = dimens.fontDefault,
                 textAlign = TextAlign.Center,

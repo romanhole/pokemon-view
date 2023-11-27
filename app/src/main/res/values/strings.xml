@@ -7,4 +7,10 @@
     <string name="dialog_ok">OK</string>
     <string name="failed_get_limit_url">Failed when trying to get the endpoint limit from the URL</string>
     <string name="failed_get_offset_url">Failed when trying to get the endpoint offset from the URL</string>
+    <string name="search_by_pokemon_number">Search by pokemon number</string>
+    <string name="next_button">next</string>
+    <string name="previous_button">previous</string>
+    <string name="stats">Stats:</string>
+    <string name="types">Types:</string>
+    <string name="pokemon_number">Nº %1$s</string>
 </resources>

@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.pokemon.R
 import com.example.pokemon.data.network.models.Pokemon
 import com.example.pokemon.ui.components.ErrorDialog
 import com.example.pokemon.ui.data.UiState
@@ -100,11 +101,11 @@ fun PokemonDetails(
                 }
             )
         }
-    ) {
+    ) { padding ->
         Column(
             modifier = Modifier
                 .padding(
-                    top = it.calculateTopPadding(),
+                    top = padding.calculateTopPadding(),
                     bottom = dimens.default,
                     start = dimens.spaceXXMedium,
                     end = dimens.spaceXXMedium
@@ -122,7 +123,7 @@ fun PokemonDetails(
             Spacer(modifier = Modifier.height(dimens.default))
 
             Text(
-                text = "Nº ${pokemon.id}",
+                text = stringResource(R.string.pokemon_number, pokemon.id),
                 color = MaterialTheme.colorScheme.onSurface,
                 fontSize = dimens.fontLarge,
                 textAlign = TextAlign.Center,
@@ -146,7 +147,7 @@ fun PokemonDetails(
             Spacer(modifier = Modifier.height(dimens.spaceMedium))
 
             Text(
-                text = "Stats:",
+                text = stringResource(R.string.stats),
                 fontSize = dimens.fontLarge
             )
 
@@ -164,7 +165,7 @@ fun PokemonDetails(
             Spacer(modifier = Modifier.height(dimens.spaceMedium))
 
             Text(
-                text = "Types:",
+                text = stringResource(R.string.types),
                 fontSize = dimens.fontLarge
             )
 

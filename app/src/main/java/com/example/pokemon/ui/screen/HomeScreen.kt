@@ -178,7 +178,7 @@ private fun LaunchHomeScreen(
                     modifier = Modifier
                         .padding(dimens.default)
                 ) {
-                    Text(text = "previous")
+                    Text(text = stringResource(R.string.previous_button))
                 }
             }
 
@@ -188,7 +188,7 @@ private fun LaunchHomeScreen(
                     modifier = Modifier
                         .padding(dimens.default)
                 ) {
-                    Text(text = "next")
+                    Text(text = stringResource(R.string.next_button))
                 }
             }
         }
@@ -225,7 +225,7 @@ fun SearchBar(
             modifier = Modifier
                 .weight(1f)
                 .padding(end = 8.dp),
-            placeholder = { Text("Search by pokemon number") },
+            placeholder = { Text(stringResource(R.string.search_by_pokemon_number)) },
             singleLine = true,
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.White,
