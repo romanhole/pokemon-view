@@ -8,9 +8,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
-    /*@GET("pokemon/?limit=10&offset=0")
-    fun getPokemons(*//*@Path("endpoint") endpoint: String*//*): Call<PokemonList>*/
-
     @GET("pokemon")
     fun getPokemons(
         @Query("limit") limit: Int,

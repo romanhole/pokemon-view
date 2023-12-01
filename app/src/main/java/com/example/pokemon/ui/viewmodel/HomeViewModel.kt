@@ -42,11 +42,17 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            getPokemons(currentUrl)
+
             pageState.asStateFlow().collect { newState ->
                 when(newState) {
-                    is PageState.NextPage -> getPokemons(nextUrl)
+                    is PageState.NextPage -> {
+                        nextUrl?.let { getPokemons(it) }
+                    }
 
-                    is PageState.PreviousPage -> getPokemons(previousUrl)
+                    is PageState.PreviousPage -> {
+                        previousUrl?.let { getPokemons(it) }
+                    }
 
                     null -> Unit
                 }
@@ -54,10 +60,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    suspend fun getPokemons(url: String?) {
-        val urlVerified = url ?: currentUrl
+    private suspend fun getPokemons(url: String) {
 
-        when(val ret = getLimitAndOffset(urlVerified)) {
+        when(val ret = getLimitAndOffset(url)) {
 
             is ResponseData.Success -> {
                 val pokemonList = pokemonRepository.getPokemonList(ret.ret.first, ret.ret.second)
@@ -65,7 +70,7 @@ class HomeViewModel @Inject constructor(
                 when(pokemonList) {
 
                     is ResponseData.Success -> {
-                        currentUrl = urlVerified
+                        currentUrl = url
                         nextUrl = pokemonList.ret.next
                         previousUrl = pokemonList.ret.previous
 
