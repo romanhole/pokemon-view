@@ -49,6 +49,4 @@ A camada de ui se estrutura da seguinte forma:
 
 - Adicionar suporte para português
 
-- Adicionar splash screen
-
 - Adicionar loading state
