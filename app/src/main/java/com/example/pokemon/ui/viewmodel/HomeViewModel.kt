@@ -47,10 +47,16 @@ class HomeViewModel @Inject constructor(
             pageState.asStateFlow().collect { newState ->
                 when(newState) {
                     is PageState.NextPage -> {
+                        _state.update {
+                            UiState.Idle
+                        }
                         nextUrl?.let { getPokemons(it) }
                     }
 
                     is PageState.PreviousPage -> {
+                        _state.update {
+                            UiState.Idle
+                        }
                         previousUrl?.let { getPokemons(it) }
                     }
 

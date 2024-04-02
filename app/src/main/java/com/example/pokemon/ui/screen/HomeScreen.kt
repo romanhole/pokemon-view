@@ -58,32 +58,25 @@ fun HomeScreen(
     navController: NavController
 ) {
     val state by viewModel.state.collectAsState()
+    var isLoading by remember {
+        mutableStateOf(true)
+    }
+    var pokemonList = remember {
+        mutableListOf<PokemonItem>()
+    }
     var isErrorDialogOpen: Pair<Boolean, Int> by remember {
         mutableStateOf(Pair(false, 0))
     }
 
     when(state) {
-        is UiState.Idle -> Unit
+        is UiState.Idle -> {
+            isLoading = true
+        }
 
         is UiState.Success -> {
             viewModel.pageState.update { null }
-
-            LaunchHomeScreen(
-                dimens = dimens,
-                pokemonItems = (state as UiState.Success<List<PokemonItem>>).ret,
-                navigateToPokemonScreen = { id ->
-                    navController.toPokemonScreen(id)
-                },
-                nextPokemons = {
-                    viewModel.pageState.update { HomeViewModel.PageState.NextPage }
-               },
-                previousPokemons = {
-                    viewModel.pageState.update { HomeViewModel.PageState.PreviousPage }
-               },
-                navigateToAboutScreen = {
-                    navController.toAboutScreen()
-                }
-            )
+            pokemonList = (state as UiState.Success<List<PokemonItem>>).ret.toMutableList()
+            isLoading = false
         }
 
         is UiState.Error -> isErrorDialogOpen = Pair(true, (state as UiState.Error).error)
@@ -97,12 +90,31 @@ fun HomeScreen(
             }
         )
     }
+
+    LaunchHomeScreen(
+        dimens = dimens,
+        isLoading = isLoading,
+        pokemonItems = pokemonList,
+        navigateToPokemonScreen = { id ->
+            navController.toPokemonScreen(id)
+        },
+        nextPokemons = {
+            viewModel.pageState.update { HomeViewModel.PageState.NextPage }
+        },
+        previousPokemons = {
+            viewModel.pageState.update { HomeViewModel.PageState.PreviousPage }
+        },
+        navigateToAboutScreen = {
+            navController.toAboutScreen()
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LaunchHomeScreen(
     dimens: Dimen,
+    isLoading: Boolean,
     pokemonItems: List<PokemonItem>,
     navigateToPokemonScreen: (Int) -> Unit,
     navigateToAboutScreen: () -> Unit,
@@ -161,9 +173,18 @@ private fun LaunchHomeScreen(
             modifier = Modifier
                 .padding(it)
         ) {
-            items(pokemonItems) { pokemon ->
-                PokemonCard(pokemonItem = pokemon) {
-                    navigateToPokemonScreen(pokemon.numberPokedex)
+            if (isLoading) {
+                items(10) { pokemon ->
+                    PokemonCard(isLoading = true){}
+                }
+            } else {
+                items(pokemonItems) { pokemon ->
+                    PokemonCard(
+                        isLoading = false,
+                        pokemonItem = pokemon
+                    ) {
+                        navigateToPokemonScreen(pokemon.numberPokedex)
+                    }
                 }
             }
 
