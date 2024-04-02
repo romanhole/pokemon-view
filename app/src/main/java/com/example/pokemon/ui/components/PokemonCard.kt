@@ -29,7 +29,7 @@ import com.example.pokemon.ui.theme.PokemonTheme
 
 @Composable
 fun PokemonCard(
-    pokemonItem: PokemonItem? = null,
+    pokemonItem: PokemonItem,
     goToPokemonDetails: () -> Unit
 ) {
     val dimens = compositionLocalOf { Dimen() }.current
@@ -49,36 +49,34 @@ fun PokemonCard(
         Column(
             modifier = Modifier.padding(dimens.default)
         ) {
-            pokemonItem?.let {
-                AsyncImage(
-                    model = pokemonItem.imageUrl,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1.5f),
-                    contentScale = ContentScale.Crop
-                )
-                Spacer(modifier = Modifier.height(dimens.default))
-                Text(
-                    text = stringResource(R.string.pokemon_number, pokemonItem.numberPokedex),
-                    color = MaterialTheme.colorScheme.surfaceTint,
-                    fontSize = dimens.fontDefault,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally)
-                )
-                Spacer(modifier = Modifier.height(dimens.default))
-                Text(
-                    text = pokemonItem.name,
-                    color = MaterialTheme.colorScheme.surfaceTint,
-                    fontSize = dimens.fontDefault,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally)
-                )
-            }
+            AsyncImage(
+                model = pokemonItem.imageUrl,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1.5f),
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.height(dimens.default))
+            Text(
+                text = stringResource(R.string.pokemon_number, pokemonItem.numberPokedex),
+                color = MaterialTheme.colorScheme.surfaceTint,
+                fontSize = dimens.fontDefault,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
+            )
+            Spacer(modifier = Modifier.height(dimens.default))
+            Text(
+                text = pokemonItem.name,
+                color = MaterialTheme.colorScheme.surfaceTint,
+                fontSize = dimens.fontDefault,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
+            )
         }
     }
 }
