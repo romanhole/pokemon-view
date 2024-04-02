@@ -28,7 +28,10 @@ import com.example.pokemon.ui.theme.Dimen
 import com.example.pokemon.ui.theme.PokemonTheme
 
 @Composable
-fun PokemonCard(pokemonItem: PokemonItem, goToPokemonDetails: () -> Unit) {
+fun PokemonCard(
+    pokemonItem: PokemonItem,
+    goToPokemonDetails: () -> Unit
+) {
     val dimens = compositionLocalOf { Dimen() }.current
 
     Card(

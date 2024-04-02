@@ -46,10 +46,9 @@ import com.example.pokemon.ui.navigation.Routes.PokemonScreen.toPokemonScreen
 import com.example.pokemon.data.network.models.PokemonItem
 import com.example.pokemon.ui.components.ErrorDialog
 import com.example.pokemon.ui.components.PokemonCard
-import com.example.pokemon.ui.data.UiState
+import com.example.pokemon.ui.components.ShimmerPokemonCard
 import com.example.pokemon.ui.theme.Dimen
 import com.example.pokemon.ui.viewmodel.HomeViewModel
-import kotlinx.coroutines.flow.update
 
 @Composable
 fun HomeScreen(
@@ -57,52 +56,43 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    val state by viewModel.state.collectAsState()
-    var isErrorDialogOpen: Pair<Boolean, Int> by remember {
-        mutableStateOf(Pair(false, 0))
-    }
-
-    when(state) {
-        is UiState.Idle -> Unit
-
-        is UiState.Success -> {
-            viewModel.pageState.update { null }
-
-            LaunchHomeScreen(
-                dimens = dimens,
-                pokemonItems = (state as UiState.Success<List<PokemonItem>>).ret,
-                navigateToPokemonScreen = { id ->
-                    navController.toPokemonScreen(id)
-                },
-                nextPokemons = {
-                    viewModel.pageState.update { HomeViewModel.PageState.NextPage }
-               },
-                previousPokemons = {
-                    viewModel.pageState.update { HomeViewModel.PageState.PreviousPage }
-               },
-                navigateToAboutScreen = {
-                    navController.toAboutScreen()
-                }
-            )
-        }
-
-        is UiState.Error -> isErrorDialogOpen = Pair(true, (state as UiState.Error).error)
-    }
+    val isLoading by viewModel.loadingState.collectAsState()
+    val pokemonList by viewModel.pokemonList.collectAsState()
+    val isErrorDialogOpen by viewModel.errorState.collectAsState()
 
     if (isErrorDialogOpen.first) {
         ErrorDialog(
             text = stringResource(isErrorDialogOpen.second),
             onDismissRequest = {
-                isErrorDialogOpen = Pair(false, 0)
+                viewModel.dismissDialog()
             }
         )
     }
+
+    LaunchHomeScreen(
+        dimens = dimens,
+        isLoading = isLoading,
+        pokemonItems = pokemonList,
+        navigateToPokemonScreen = { id ->
+            navController.toPokemonScreen(id)
+        },
+        nextPokemons = {
+            viewModel.nextPage()
+        },
+        previousPokemons = {
+            viewModel.previusPage()
+        },
+        navigateToAboutScreen = {
+            navController.toAboutScreen()
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LaunchHomeScreen(
     dimens: Dimen,
+    isLoading: Boolean,
     pokemonItems: List<PokemonItem>,
     navigateToPokemonScreen: (Int) -> Unit,
     navigateToAboutScreen: () -> Unit,
@@ -161,9 +151,15 @@ private fun LaunchHomeScreen(
             modifier = Modifier
                 .padding(it)
         ) {
-            items(pokemonItems) { pokemon ->
-                PokemonCard(pokemonItem = pokemon) {
-                    navigateToPokemonScreen(pokemon.numberPokedex)
+            if (isLoading) {
+                items(10) { _ ->
+                    ShimmerPokemonCard()
+                }
+            } else {
+                items(pokemonItems) { pokemon ->
+                    PokemonCard(pokemonItem = pokemon) {
+                        navigateToPokemonScreen(pokemon.numberPokedex)
+                    }
                 }
             }
 
