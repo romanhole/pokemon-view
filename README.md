@@ -49,6 +49,6 @@ A camada de ui se estrutura da seguinte forma:
 
 - Adicionar suporte para português
 
-- Adicionar loading state
-
 - Publicar na play store
+
+- Deixar botões de previus e next page como floating

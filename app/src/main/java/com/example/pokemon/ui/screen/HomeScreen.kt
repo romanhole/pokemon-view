@@ -46,10 +46,9 @@ import com.example.pokemon.ui.navigation.Routes.PokemonScreen.toPokemonScreen
 import com.example.pokemon.data.network.models.PokemonItem
 import com.example.pokemon.ui.components.ErrorDialog
 import com.example.pokemon.ui.components.PokemonCard
-import com.example.pokemon.ui.data.UiState
+import com.example.pokemon.ui.components.ShimmerPokemonCard
 import com.example.pokemon.ui.theme.Dimen
 import com.example.pokemon.ui.viewmodel.HomeViewModel
-import kotlinx.coroutines.flow.update
 
 @Composable
 fun HomeScreen(
@@ -57,36 +56,15 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    val state by viewModel.state.collectAsState()
-    var isLoading by remember {
-        mutableStateOf(true)
-    }
-    var pokemonList = remember {
-        mutableListOf<PokemonItem>()
-    }
-    var isErrorDialogOpen: Pair<Boolean, Int> by remember {
-        mutableStateOf(Pair(false, 0))
-    }
-
-    when(state) {
-        is UiState.Idle -> {
-            isLoading = true
-        }
-
-        is UiState.Success -> {
-            viewModel.pageState.update { null }
-            pokemonList = (state as UiState.Success<List<PokemonItem>>).ret.toMutableList()
-            isLoading = false
-        }
-
-        is UiState.Error -> isErrorDialogOpen = Pair(true, (state as UiState.Error).error)
-    }
+    val isLoading by viewModel.loadingState.collectAsState()
+    val pokemonList by viewModel.pokemonList.collectAsState()
+    val isErrorDialogOpen by viewModel.errorState.collectAsState()
 
     if (isErrorDialogOpen.first) {
         ErrorDialog(
             text = stringResource(isErrorDialogOpen.second),
             onDismissRequest = {
-                isErrorDialogOpen = Pair(false, 0)
+                viewModel.dismissDialog()
             }
         )
     }
@@ -99,10 +77,10 @@ fun HomeScreen(
             navController.toPokemonScreen(id)
         },
         nextPokemons = {
-            viewModel.pageState.update { HomeViewModel.PageState.NextPage }
+            viewModel.nextPage()
         },
         previousPokemons = {
-            viewModel.pageState.update { HomeViewModel.PageState.PreviousPage }
+            viewModel.previusPage()
         },
         navigateToAboutScreen = {
             navController.toAboutScreen()
@@ -174,15 +152,12 @@ private fun LaunchHomeScreen(
                 .padding(it)
         ) {
             if (isLoading) {
-                items(10) { pokemon ->
-                    PokemonCard(isLoading = true){}
+                items(10) { _ ->
+                    ShimmerPokemonCard()
                 }
             } else {
                 items(pokemonItems) { pokemon ->
-                    PokemonCard(
-                        isLoading = false,
-                        pokemonItem = pokemon
-                    ) {
+                    PokemonCard(pokemonItem = pokemon) {
                         navigateToPokemonScreen(pokemon.numberPokedex)
                     }
                 }
